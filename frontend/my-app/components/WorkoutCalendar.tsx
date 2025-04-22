@@ -5,7 +5,15 @@ import "react-calendar/dist/Calendar.css";
 import "@/components/calStyles.css";
 
 const WorkoutCalendar = () => {
-  const [workouts, setWorkouts] = useState([]);
+  type Workout = {
+    _id: string;
+    workoutName: string;
+    date: string;
+    activity: string;
+    duration: number;
+    calories: number;
+  };
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -30,8 +38,11 @@ useEffect(() => {
       console.log('Formatted workouts:', formattedWorkouts);
       setWorkouts(formattedWorkouts);
     } catch (error) {
-      console.error('Error fetching workouts:', error);
-      setError(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("An unknown error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
