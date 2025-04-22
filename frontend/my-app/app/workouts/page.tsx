@@ -54,7 +54,7 @@ export default function Home() {
 
   const fetchWorkouts = async()=>{
     try {
-      const response = await fetch("http://localhost:4000/api/workouts", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/workouts`, {
         credentials: "include", 
       });
       if(!response.ok){
@@ -77,7 +77,7 @@ export default function Home() {
 
     setIsDeleting(true);
   try {
-    const response = await fetch(`http://localhost:4000/api/workouts/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/workouts/${id}`, {
       method: 'DELETE',
       credentials: "include",
     });

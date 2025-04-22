@@ -30,7 +30,7 @@ const AddMeal = () => {
 
   const onSubmit = async (data: NutriFormData) => {
     try {
-      const response = await fetch("http://localhost:4000/api/nutrition", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nutrition`, {
         method: "POST",
         credentials: "include",
         headers: {

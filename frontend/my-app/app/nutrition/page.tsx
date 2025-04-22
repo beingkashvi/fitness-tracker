@@ -50,7 +50,7 @@ export default function Home() {
 
   const fetchNutritions = async()=>{
     try {
-      const response = await fetch('http://localhost:4000/api/nutrition',{
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nutrition`,{
         credentials:"include"
       });
       if(!response.ok){
@@ -73,7 +73,7 @@ export default function Home() {
 
     setIsDeleting(true);
   try {
-    const response = await fetch(`http://localhost:4000/api/nutrition/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nutrition/${id}`, {
       method: 'DELETE',
       credentials:"include"
     });

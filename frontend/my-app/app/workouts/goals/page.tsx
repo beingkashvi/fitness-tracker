@@ -131,7 +131,7 @@ const goalsPage = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const goalsResponse = await fetch("http://localhost:4000/api/goals", {
+        const goalsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals`, {
           method: "GET",
           credentials:"include",
 
@@ -142,7 +142,7 @@ const goalsPage = () => {
         const goalsData = await goalsResponse.json();
         console.log("Fetched goals:", goalsData);
 
-        const workoutsResponse = await fetch("http://localhost:4000/api/workouts",{
+        const workoutsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/workouts`,{
           credentials:"include",
         });
 
@@ -192,7 +192,7 @@ const goalsPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/api/goals", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals`, {
         method: "POST",
         credentials:"include",
         headers: {"Content-Type" : "application/json"},

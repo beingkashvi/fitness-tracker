@@ -43,7 +43,7 @@ const AddWorkout = () => {
 
   const onSubmit = async(data: WorkoutFormData) => {
     try{
-     const response = await fetch("http://localhost:4000/api/workouts", {
+     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/workouts`, {
        method: "POST",
        credentials: "include",
        headers: {
