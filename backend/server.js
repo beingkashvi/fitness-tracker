@@ -16,11 +16,11 @@ const app = express();
 
 const corsOptions = {
   origin: ["http://localhost:3000", 
-  "https://track-tive.vercel.app/"],
+  "https://track-tive.vercel.app"],
   credentials: true, 
 };
 app.use(cors(corsOptions));
-
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
