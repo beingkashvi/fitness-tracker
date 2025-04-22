@@ -92,13 +92,19 @@ const AddWorkout = () => {
 
   <DatePicker
     selected={watch("startTime") ? new Date(`1970-01-01T${watch("startTime")}`) : null}
-    onChange={(time: Date) => {
+    onChange={(time: Date | null) => {
+      if (time) {
       const formattedTime = time.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       });
-      setValue("startTime", formattedTime, { shouldValidate: true });
+      
+        setValue("startTime", formattedTime, { shouldValidate: true });
+      } else {
+        setValue("startTime","",{shouldValidate:true})
+      }
+      
     }}
     showTimeSelect
     showTimeSelectOnly
@@ -122,8 +128,13 @@ const AddWorkout = () => {
 
   <DatePicker
   selected={watch("date") ? new Date(watch("date")) : null}
-  onChange={(date: Date) => {
-    setValue("date", date.toISOString().split('T')[0], { shouldValidate: true })
+  onChange={(date: Date|null) => {
+    if (date) {
+      setValue("date", date.toISOString().split('T')[0], { shouldValidate: true })
+    }
+    else {
+      setValue("date", "", { shouldValidate: true });
+    }
   }}
   onMonthChange={(date) => setViewDate(date)}   // To track visible month
   maxDate={new Date()}

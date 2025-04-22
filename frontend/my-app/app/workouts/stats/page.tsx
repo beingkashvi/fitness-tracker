@@ -28,10 +28,10 @@ currentWeekStart.setDate(currentDate.getDate() + diffToMonday);
 // Sunday of current week
 const currentWeekEnd = new Date(currentWeekStart);
 currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
-const isSameOrAfter = (date1, date2) =>
+const isSameOrAfter = (date1:any, date2:any) =>
   date1.setHours(0,0,0,0) >= date2.setHours(0,0,0,0)
 
-  const isSameOrBefore = (date1, date2) =>
+  const isSameOrBefore = (date1:any, date2:any) =>
     date1.setHours(0, 0, 0, 0) <= date2.setHours(0, 0, 0, 0)
 // Filter workouts for current week
 const weeklyWorkouts = workouts.filter((workout) => {
@@ -47,17 +47,31 @@ const weeklyWorkouts = workouts.filter((workout) => {
     const dayIndex = (jsDayIndex+6)%7;
     const activity = workout.activity.toLowerCase();
 
-    if (weeklyData[dayIndex][activity] !== undefined) {
-      weeklyData[dayIndex][activity] += workout.calories;
-    }
+    type WorkoutActivity = "run" | "cycle" | "swim" | "weightlifting" | "yoga";
+
+    const isValidActivity = (key: string): key is WorkoutActivity =>
+  ["run", "cycle", "swim", "weightlifting", "yoga"].includes(key);
+    
+  if (isValidActivity(activity)) {
+    weeklyData[dayIndex][activity] += workout.calories;
+  }
   });
 
   return weeklyData;
 };
 
 const StatsPage = () => {
+  type WeeklyWorkoutData = {
+    day: string;
+    run: number;
+    cycle: number;
+    swim: number;
+    weightlifting: number;
+    yoga: number;
+  };
+  
   const [workouts, setWorkouts] = useState([]);
-  const [weeklyData, setWeeklyData] = useState([]);
+  const [weeklyData, setWeeklyData] = useState<WeeklyWorkoutData[]>([]);
 
   useEffect(() => {
     const fetchWorkouts = async() =>{

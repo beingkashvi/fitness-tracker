@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 // Helper function to filter weekly workouts
 const getWeeklyWorkouts = (workouts: any[]) => {
   const currentDate = new Date();
-  const isSameOrAfter = (date1, date2) =>
+  const isSameOrAfter = (date1:any, date2:any) =>
   date1.setHours(0,0,0,0) >= date2.setHours(0,0,0,0)
 
-  const isSameOrBefore = (date1, date2) =>
+  const isSameOrBefore = (date1:any, date2:any) =>
     date1.setHours(0, 0, 0, 0) <= date2.setHours(0, 0, 0, 0)
   
   const currentWeekStart = new Date(currentDate);
@@ -33,8 +33,16 @@ const getWeeklyWorkouts = (workouts: any[]) => {
 
 export default function Home() {
   //const { workouts, } = useWorkout();
+  type Workout = {
+    _id: string;
+    date: string;
+    activity: string;
+    duration: number;
+    calories: number;
+  };
+  
   const router = useRouter();
-  const [workouts, setWorkouts] = useState([]);
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [activeTab, setActiveTab] = useState("all-time");
 
   //Fetching From The Backend
@@ -80,7 +88,7 @@ export default function Home() {
 
     fetchWorkouts();
   } catch (error) {
-    console.error('Error deleting workout:', error.message);
+    console.error('Error deleting workout:', error);
     alert('Failed to delete workout. Please try again.');
   } finally {
     setIsDeleting(false);

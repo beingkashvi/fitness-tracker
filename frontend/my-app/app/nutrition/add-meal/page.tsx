@@ -105,7 +105,13 @@ const AddMeal = () => {
               <label>Date<span className="text-red-700">*</span></label>
               <DatePicker
                 selected={watch("date") ? new Date(watch("date")) : null}
-                onChange={(date: Date) => setValue("date", date.toISOString().split('T')[0], { shouldValidate: true })}
+                onChange={(date: Date | null) => {
+                  if (date) {
+                    setValue("date", date.toISOString().split('T')[0], { shouldValidate: true })
+                  } else {
+                    setValue("date", "", { shouldValidate: true });
+                  }
+                }}
                 onMonthChange={(date) => setViewDate(date)}
                 maxDate={new Date()}
                 placeholderText="Select date"

@@ -45,9 +45,14 @@ const getWeeklyMealsData = (meals: any[]) => {
     const nutrition =
       meal.nutrition.charAt(0).toUpperCase() + meal.nutrition.slice(1).toLowerCase();
 
-    if (weeklyData[dayIndex][nutrition] !== undefined) {
-      weeklyData[dayIndex][nutrition] += meal.calories;
-    }
+      type NutritionType = "Breakfast" | "Lunch" | "Dinner" | "Evening" | "Other";
+
+      const isValidNutritionType = (key: string): key is NutritionType =>
+        ["Breakfast", "Lunch", "Dinner", "Evening", "Other"].includes(key);
+      
+      if (isValidNutritionType(nutrition)) {
+        weeklyData[dayIndex][nutrition] += meal.calories;
+      }
   });
 
   return weeklyData;
@@ -56,8 +61,16 @@ const getWeeklyMealsData = (meals: any[]) => {
 
 const StatsPage = () => {
   //const { meals } = useMeal();
+  type WeeklyMealData = {
+    day: string;
+    Breakfast: number;
+    Lunch: number;
+    Dinner: number;
+    Evening: number;
+    Other: number;
+  };
     const [meals, setMeals] = useState([]);
-  const [weeklyData, setWeeklyData] = useState([]);
+  const [weeklyData, setWeeklyData] = useState<WeeklyMealData[]>([]);
 
     useEffect(() => {
         const fetchNutritions = async () => {

@@ -25,10 +25,10 @@ const goalsPage = () => {
   // console.log("goalsPage render: Token:", token); // Debug on every render
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [goals, setGoals] = useState<GoalFormData[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [showCompleted, setShowCompleted] = useState(false);
 
   const goalSchema = z.object({
@@ -38,18 +38,24 @@ const goalsPage = () => {
     goalStart: z.string().min(1, "Goal start is required"),
   });
 
-  type GoalFormData = z.infer<typeof goalSchema> & {
+  type GoalFormData = z.infer<typeof goalSchema>;
+  //   & {
+  //   name: string;
+  //   progress: number;
+  //   completed: boolean;
+  // };
+  type Goal = GoalFormData & {
     name: string;
     progress: number;
     completed: boolean;
+    createdAt?: string;
   };
-
   const { register, handleSubmit, reset, formState: { errors } } = useForm<GoalFormData>({
     resolver: zodResolver(goalSchema),
   });
 
-  const calculateProgress = (goal, workouts) => {
-    let startDate;
+  const calculateProgress = (goal:Goal, workouts:any[]):Goal => {
+    let startDate:Date;
   const today = new Date();
   const day = today.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
   const diffToMonday = (day === 0 ? -6 : 1) - day;
@@ -145,20 +151,22 @@ const goalsPage = () => {
         }
         const workoutsData = await workoutsResponse.json();
 
-        const normalizedGoals = goalsData.map((goal) => ({
+        const normalizedGoals = goalsData.map((goal:any) => ({
           ...goal,
           workoutName: goal.name, // 🔥 Normalize for consistent access
         }));
         
-        const updatedGoals = normalizedGoals.map((goal) =>
+        const updatedGoals = normalizedGoals.map((goal:any) =>
           calculateProgress(goal, workoutsData)
         );
         setGoals(updatedGoals);
         setWorkouts(workoutsData);
       } catch (error) {
-        
-        setError(error.message);
-        
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred.");
+        }
       } finally {
         setIsLoading(false);
       }

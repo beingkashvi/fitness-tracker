@@ -32,7 +32,14 @@ const getWeeklyMeals = (meals: any[]) => {
 
 export default function Home() {
   //const { meals } = useMeal();
-  const [meals, setMeals] = useState([]);
+  type Meal = {
+    _id: string;
+    date: string;
+    mealName: string;
+    calories: number;
+    nutrition: string;
+  };
+  const [meals, setMeals] = useState<Meal[]>([]);
   const [activeTab, setActiveTab] = useState("all-time");
 
   useEffect(() => {
@@ -77,7 +84,7 @@ export default function Home() {
 
     fetchNutritions();
   } catch (error) {
-    console.error('Error deleting nutrition:', error.message);
+    console.error('Error deleting nutrition:', error);
     alert('Failed to delete nutrition. Please try again.');
   } finally {
     setIsDeleting(false);
